@@ -10,9 +10,11 @@ Bot otomasi untuk melakukan anotasi data secara otomatis ke Label Studio berdasa
 
 ## Instalasi
 
-1. **Buka Terminal / Command Prompt** dan masuk ke direktori project Anda:
+1. **Unduh / Clone Repository**
+   Buka Terminal / Command Prompt dan jalankan perintah berikut untuk mengunduh kode dari GitHub:
    ```bash
-   cd /path/to/LabelStudioBot
+   git clone https://github.com/Hilal06/LabelStudioBot.git
+   cd LabelStudioBot
    ```
 
 2. **Buat Virtual Environment (Sangat Direkomendasikan)**
