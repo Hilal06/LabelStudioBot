@@ -20,6 +20,6 @@ test_data.json
 
 # Temporary Files
 GITHUB_ABOUT.md
-tui_screenshot.png
+# tui_screenshot.png
 tui_screenshot.svg
 .DS_Store
