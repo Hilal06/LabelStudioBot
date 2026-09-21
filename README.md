@@ -1,111 +1,114 @@
 # 🤖 Label Studio Auto-Annotation Bot
 
-Bot ini dibuat untuk membantu Anda melakukan anotasi data secara otomatis ke **Label Studio**. Bot akan membaca hasil label (misalnya sentimen) yang sudah Anda siapkan di file Excel (`.xlsx`) dan memasukkannya ke Label Studio secara otomatis. 
+Bot otomatisasi ringan untuk memasukkan hasil anotasi data dari file Excel (`.xlsx`) ke platform **Label Studio** secara otomatis. Dilengkapi tampilan terminal interaktif (**TUI Dashboard**) yang modern, bersih, dan mudah digunakan.
 
-**Fitur Unggulan:** 
-Bot ini memiliki fitur "jeda acak" (random delay) antara 15-30 detik pada setiap pengisian data. Hal ini membuat bot terlihat seperti manusia yang sedang bekerja (human-like) dan mencegah akun Anda terdeteksi sebagai bot atau spam oleh server.
-
----
-
-## 📋 Persiapan (Prasyarat)
-Sebelum memulai, pastikan Anda sudah memiliki:
-1. **Python** versi 3.8 atau yang lebih baru terinstal di komputer/laptop Anda.
-2. Akun **Label Studio** yang sudah memiliki **API Key** aktif.
-3. Sebuah **Project di Label Studio** yang sudah siap menampung anotasi data (Anda perlu mengetahui ID Project-nya).
+![Label Studio Bot TUI Dashboard](assets/tui_screenshot.png)
 
 ---
 
-## 🛠️ Langkah-langkah Instalasi
+## 🌟 Mengapa Menggunakan Bot Ini?
 
-Ikuti langkah-langkah di bawah ini secara berurutan:
+- **⚡ Hemat Waktu & Tenaga**: Tidak perlu memasukkan data label satu per satu secara manual di web browser.
+- **🛡️ Aman & Natural (*Human-like Delay*)**: Memiliki fitur jeda waktu acak (15–30 detik) antar pengisian data agar proses anotasi terlihat alami dan tidak dianggap spam oleh server.
+- **📊 Pantau Progres Secara Live**: Dashboard statistik menampilkan jumlah data target, jumlah berhasil, gagal, serta persentase progres secara real-time.
+- **🎛️ Kontrol Penuh**: Anda dapat menguji koneksi API, memulai, menghentikan sementara (*pause*), atau membatalkan proses kapan saja langsung dari tombol terminal.
 
-### 1. Unduh Kode Bot (Clone Repository)
-Buka aplikasi **Terminal** (di macOS/Linux) atau **Command Prompt / PowerShell** (di Windows), lalu jalankan perintah ini:
+---
+
+## 📋 Persyaratan Sebelum Memulai
+
+Pastikan komputer Anda sudah terpasang:
+1. **Python 3.8** atau versi yang lebih baru.
+2. **Kunci API (API Key)** dari akun Label Studio Anda.
+3. File data hasil anotasi bertipe `.xlsx` (Excel) dan file filter `.json`.
+
+---
+
+## 🚀 Panduan Instalasi (4 Langkah Mudah)
+
+### 1. Unduh Project
+Buka Terminal atau Command Prompt, lalu jalankan:
 ```bash
 git clone https://github.com/Hilal06/LabelStudioBot.git
 cd LabelStudioBot
 ```
 
-### 2. Buat "Ruang Kerja" Khusus (Virtual Environment)
-*Catatan pemula: Virtual environment sangat penting agar aplikasi bot ini tidak merusak atau berbenturan dengan aplikasi Python lain di komputer Anda.*
-
-Jalankan perintah ini untuk membuat ruang kerja khusus bernama `venv`:
+### 2. Buat Lingkungan Kerja (Virtual Environment)
 ```bash
 python3 -m venv venv
 ```
-
-### 3. Aktifkan Ruang Kerja Tersebut
-Anda harus mengaktifkannya setiap kali ingin menjalankan bot.
-- **Untuk pengguna Windows:**
-  ```bash
-  venv\Scripts\activate
-  ```
-- **Untuk pengguna Linux / macOS:**
+Aktifkan lingkungan kerja:
+- **Linux / macOS:**
   ```bash
   source venv/bin/activate
   ```
-*(Jika berhasil diaktifkan, biasanya akan muncul tulisan `(venv)` di depan baris terminal Anda).*
+- **Windows:**
+  ```bash
+  venv\Scripts\activate
+  ```
 
-### 4. Install Bahan-bahan yang Dibutuhkan
-Bot ini membutuhkan beberapa alat bantuan (library). Install semuanya sekaligus dengan perintah ini:
+### 3. Install Dependensi
 ```bash
-pip install pandas openpyxl label-studio-sdk python-dotenv
+pip install -r requirements.txt
 ```
 
 ---
 
-## ⚙️ Pengaturan Sebelum Dijalankan (Konfigurasi)
+## ⚙️ Pengaturan Data & Kunci API
 
-### 1. Siapkan Kunci API (API Key)
-Bot butuh kunci agar bisa masuk ke akun Label Studio Anda.
-1. Buat sebuah file baru bernama `.env` (pastikan ada titik di depannya) di dalam folder `LabelStudioBot`.
-2. Isi file tersebut dengan teks seperti di bawah ini, lalu ganti dengan API Key Anda yang asli:
-   ```env
-   LABEL_STUDIO_API_KEY=KODE_API_KEY_ANDA_DI_SINI
-   ```
-
-### 2. Siapkan File Excel Anda
-Pastikan file Excel yang berisi data Anda (misal: `Annotated_Tweets_Cleaned.xlsx`) diletakkan di dalam folder yang sama dengan bot ini. File tersebut harus memiliki:
-- Kolom bernama `id` (sebagai penanda unik setiap data).
-- Kolom berisi hasil label Anda (misal: kolom bernama `sentiment`).
-
-### 3. Sesuaikan File Python Bot
-Buka file `bot_entry_anotation.py` menggunakan teks editor (Notepad, VS Code, dll). Cari bagian ini dan sesuaikan dengan milik Anda:
-```python
-LABEL_STUDIO_URL = 'https://bdsrc.binus.ac.id/label-studio/' # Ganti jika URL Label Studio Anda berbeda
-PROJECT_ID = 20 # Ganti dengan ID Project Anda
+### 1. Buat File `.env`
+Buat file baru bernama `.env` di folder project, lalu isi sesuai akun Label Studio Anda:
+```env
+LABEL_STUDIO_URL=https://bdsrc.binus.ac.id/label-studio/
+LABEL_STUDIO_API_KEY=KODE_API_KEY_ANDA_DI_SINI
+LABEL_STUDIO_PROJECT_ID=20
+EXCEL_FILE=Annotated_Tweets_Cleaned.xlsx
+ID_FILTER_FILE=test_data.json
 ```
 
-### 4. Pilih Data yang Ingin Diproses (Target ID)
-Anda bisa mengatur bot agar hanya memproses data tertentu saja dengan mengubah isi file `test_data.json`.
-Ada dua cara pengisian:
-
-- **Cara 1: Jarak / Rentang (Dari angka X sampai Y)**
+### 2. Atur Target Data (`test_data.json`)
+Tentukan baris data mana yang ingin diproses oleh bot:
+- **Rentang ID (Contoh: ID 811 sampai 815):**
   ```json
   {
       "dari": 811,
       "sampai": 815
   }
   ```
-- **Cara 2: Pilih ID Spesifik / Acak**
+- **Pilihan ID Spesifik (Contoh: ID tertentu saja):**
   ```json
   [806, 807, 810, 815]
   ```
 
 ---
 
-## 🚀 Cara Menjalankan Bot
+## 🎮 Cara Menjalankan Bot
 
-Jika semua persiapan di atas sudah selesai, saatnya menjalankan bot:
+Pastikan Virtual Environment sudah aktif (ditandai dengan tulisan `(venv)` di terminal), lalu jalankan:
 
-1. Pastikan **Virtual Environment** masih menyala (ada tulisan `(venv)` di terminal).
-2. Ketik perintah ini dan tekan Enter:
-   ```bash
-   python3 bot_entry_anotation.py
-   ```
-3. **Selesai!** Anda bisa bersantai melihat bot bekerja di terminal Anda. Bot akan:
-   - Menghubungkan diri ke Label Studio.
-   - Menyaring data yang perlu dikerjakan sesuai `test_data.json`.
-   - Mengisi data satu per satu, sambil **beristirahat acak 15-30 detik** setiap kali selesai mengisi satu data agar terlihat natural seperti manusia.
+```bash
+python3 bot_tui.py
+# ATAU
+python3 bot_entry_anotation.py
+```
 
-Di akhir proses, bot akan memberikan laporan berapa banyak data yang berhasil dan gagal diisi.
+### ⌨️ Tombol Navigasi Terminal:
+| Tombol | Fungsi |
+| :---: | :--- |
+| `S` | **Start / Pause** (Mulai atau Hentikan Sementara) |
+| `X` | **Stop** (Hentikan seluruh proses anotasi) |
+| `C` | **Test API** (Uji koneksi ke server Label Studio) |
+| `L` | **Clear Logs** (Bersihkan tampilan papan log) |
+| `Q` | **Quit** (Keluar dari aplikasi TUI) |
+
+> 💡 *Catatan: Jika Anda ingin menjalankan bot versi teks biasa tanpa tampilan grafik TUI, tambahkan perintah `--cli`:*
+> ```bash
+> python3 bot_entry_anotation.py --cli
+> ```
+
+---
+
+## ❓ Troubleshooting Sederhana
+
+- **Error: `ModuleNotFoundError: No module named 'pandas'`**
+  *Solusi*: Pastikan Anda sudah mengaktifkan lingkungan kerja Virtual Environment dengan perintah `source venv/bin/activate` sebelum menjalankan script.

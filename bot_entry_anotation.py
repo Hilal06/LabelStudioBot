@@ -5,25 +5,26 @@ import sys
 import time
 import random
 import os
+import argparse
 from dotenv import load_dotenv
 
 load_dotenv()
 
-def main():
+def main_cli():
     print("="*50)
-    print("🤖 Label Studio Auto-Annotation Bot (FILTER MODE) 🤖")
+    print("🤖 Label Studio Auto-Annotation Bot (FILTER MODE - CLI) 🤖")
     print("="*50)
 
     # Setup konfigurasi
-    LABEL_STUDIO_URL = 'https://bdsrc.binus.ac.id/label-studio/'
+    LABEL_STUDIO_URL = os.getenv('LABEL_STUDIO_URL', 'https://bdsrc.binus.ac.id/label-studio/')
     API_KEY = os.getenv('LABEL_STUDIO_API_KEY')
     if not API_KEY:
         print("Error: LABEL_STUDIO_API_KEY tidak ditemukan di environment atau file .env")
         sys.exit(1)
-    PROJECT_ID = 20
+    PROJECT_ID = int(os.getenv('LABEL_STUDIO_PROJECT_ID', 20))
     
-    EXCEL_FILE = 'Annotated_Tweets_Cleaned.xlsx'
-    ID_FILTER_FILE = 'test_data.json'
+    EXCEL_FILE = os.getenv('EXCEL_FILE', 'Annotated_Tweets_Cleaned.xlsx')
+    ID_FILTER_FILE = os.getenv('ID_FILTER_FILE', 'test_data.json')
     LABEL_COLUMN = 'sentiment'
     
     # Label config defaults
@@ -139,6 +140,23 @@ def main():
     print("="*50)
     print(f"🎉 Selesai! Berhasil: {berhasil} task, Gagal: {gagal} task")
     print("="*50)
+
+def main():
+    parser = argparse.ArgumentParser(description="Label Studio Auto-Annotation Bot")
+    parser.add_argument('--cli', action='store_true', help="Jalankan dalam mode CLI standar")
+    parser.add_argument('--tui', action='store_true', help="Jalankan dalam mode TUI modern (default)")
+    args = parser.parse_args()
+
+    if args.cli:
+        main_cli()
+    else:
+        try:
+            from bot_tui import LabelStudioTUI
+            app = LabelStudioTUI()
+            app.run()
+        except ImportError as e:
+            print(f"Gagal memuat TUI interface ({e}). Membuka mode CLI...")
+            main_cli()
 
 if __name__ == '__main__':
     main()

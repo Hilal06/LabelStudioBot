@@ -1,4 +1,25 @@
+# Virtual Environment
 venv/
-__pycache__/
-*.xlsx
+.venv/
+env/
+
+# Environment Variables & Secrets
 .env
+.env.*
+
+# Python Cache & Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Data Files (Local Data & Output)
+*.xlsx
+test_data.json
+
+# Temporary Files
+GITHUB_ABOUT.md
+tui_screenshot.png
+tui_screenshot.svg
+.DS_Store
